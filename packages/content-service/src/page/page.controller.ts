@@ -18,11 +18,6 @@ export class PageController {
         return this.appService.getOverviewBulk();
     }
 
-    // @Get('detail')
-    // getHomepage(): PageDetail {
-    //     return this.getOnePage('');
-    // }
-
     @Get('detail/:url?')
     getOnePage(@Param('url') url: string = ''): PageDetail {
         const page = this.appService.getOnePage(url);
