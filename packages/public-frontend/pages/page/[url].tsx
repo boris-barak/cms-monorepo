@@ -1,5 +1,6 @@
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import styles from '../../styles/Home.module.css';
+import { GetStaticPropsContext } from 'next';
 
 export type PageOverview = {
     title: string;
@@ -13,8 +14,13 @@ export type PageDetail = PageOverview & {
 
 type Props = { data?: PageDetail };
 
-export const getStaticProps = async () => {
-    const res = await fetch('http://localhost:3001/pages/detail');
+export const getStaticProps = async (context: GetStaticPropsContext) => {
+    console.log('url', context.params?.url ?? '');
+
+    const url = context.params?.url ?? '';
+
+    const res = await fetch(`http://localhost:3001/pages/detail/${url}`);
+
     const data = await res.json();
     return {
         props: {
@@ -23,7 +29,14 @@ export const getStaticProps = async () => {
     };
 };
 
-const Home: React.FunctionComponent<Props> = ({ data }: Props) => (
+export const getStaticPaths = async () => {
+    return {
+        paths: [],
+        fallback: true,
+    };
+};
+
+const Page: React.FunctionComponent<Props> = ({ data }: Props) => (
     <div className={styles.container}>
         {data && (
             <>
@@ -43,4 +56,4 @@ const Home: React.FunctionComponent<Props> = ({ data }: Props) => (
         <footer className={styles.footer}>This is a footer</footer>
     </div>
 );
-export default Home;
+export default Page;
