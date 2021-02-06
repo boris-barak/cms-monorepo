@@ -24,7 +24,7 @@ export class PageService {
         }));
     }
 
-    getOnePage(url: string = ''): PageDetail {
+    getOnePage(url = ''): PageDetail {
         console.log('url', url);
 
         return pagesData.find((page) => page.url === url);

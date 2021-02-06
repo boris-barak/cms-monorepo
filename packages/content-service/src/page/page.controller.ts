@@ -19,7 +19,7 @@ export class PageController {
     }
 
     @Get('detail/:url?')
-    getOnePage(@Param('url') url: string = ''): PageDetail {
+    getOnePage(@Param('url') url = ''): PageDetail {
         const page = this.appService.getOnePage(url);
 
         if (!page) {
