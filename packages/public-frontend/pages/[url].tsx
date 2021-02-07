@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import { GetStaticPropsContext } from 'next';
+import Error, { ErrorProps } from 'next/error';
 
 export type PageOverview = {
     title: string;
@@ -12,17 +13,18 @@ export type PageDetail = PageOverview & {
     content: string;
 };
 
-type Props = { data?: PageDetail };
-
 export const getStaticProps = async (context: GetStaticPropsContext) => {
     const url = context.params?.url ?? '';
 
     const res = await fetch(`http://localhost:3001/pages/detail/${url}`);
-
     const data = await res.json();
+
+    const errorCode = res.ok ? null : res.status;
+
     return {
         props: {
             data,
+            errorCode,
         },
     };
 };
@@ -34,24 +36,28 @@ export const getStaticPaths = async () => {
     };
 };
 
-const Page: React.FunctionComponent<Props> = ({ data }: Props) => (
-    <div className={styles.container}>
-        {data && (
-            <>
-                <Head>
-                    <title>Create Next App {data.title}</title>
-                    <link rel="icon" href="/favicon.ico" />
-                    <meta name="keywords" content={data.keywords?.join(', ') ?? undefined} />
-                </Head>
+type Props = { data?: PageDetail; errorCode: number | null };
 
-                <main className={styles.main}>
-                    <h1 className={styles.title}>{data.title}</h1>
+const Page: React.FunctionComponent<Props> = ({ errorCode, data }: Props) => {
+    if (errorCode) {
+        return <Error statusCode={errorCode} />;
+    }
 
-                    <p className={styles.description} dangerouslySetInnerHTML={{ __html: data.content }} />
-                </main>
-            </>
-        )}
-        <footer className={styles.footer}>This is a footer</footer>
-    </div>
-);
+    return (
+        <div className={styles.container}>
+            <Head>
+                <title>Create Next App {data?.title}</title>
+                <link rel="icon" href="/favicon.ico" />
+                <meta name="keywords" content={data?.keywords?.join(', ')} />
+            </Head>
+
+            <main className={styles.main}>
+                <h1 className={styles.title}>{data?.title}</h1>
+
+                {data && <p className={styles.description} dangerouslySetInnerHTML={{ __html: data.content }} />}
+            </main>
+            <footer className={styles.footer}>This is a footer</footer>
+        </div>
+    );
+};
 export default Page;
