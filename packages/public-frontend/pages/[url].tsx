@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import styles from '../../styles/Home.module.css';
+import styles from '../styles/Home.module.css';
 import { GetStaticPropsContext } from 'next';
 
 export type PageOverview = {
@@ -15,8 +15,6 @@ export type PageDetail = PageOverview & {
 type Props = { data?: PageDetail };
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
-    console.log('url', context.params?.url ?? '');
-
     const url = context.params?.url ?? '';
 
     const res = await fetch(`http://localhost:3001/pages/detail/${url}`);

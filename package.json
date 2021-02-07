@@ -6,7 +6,7 @@
     "bootstrap": "npm i && lerna bootstrap",
     "bootstrap:ci": "rm -rf packages/**/node_modules && npm ci && lerna bootstrap --ci",
     "start": "npm run check-nvmrc && lerna exec -- rm -rf dist && lerna run start --stream",
-    "start:dev": "npm run check-nvmrc && lerna exec -- rm -rf dist && lerna run start:dev --stream"
+    "start:dev": "npm run check-nvmrc && lerna exec -- rm -rf dist && lerna run start:dev --parallel"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.14.2",
