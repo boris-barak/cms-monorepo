@@ -1,4 +1,4 @@
-import { PageDetail } from './page.service';
+import { PageDetail } from 'common/types/page';
 
 export const pagesData: ReadonlyArray<PageDetail> = [
     {

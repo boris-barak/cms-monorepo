@@ -1,17 +1,8 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import { GetStaticPropsContext } from 'next';
-import Error, { ErrorProps } from 'next/error';
-
-export type PageOverview = {
-    title: string;
-    url: string;
-};
-
-export type PageDetail = PageOverview & {
-    keywords?: ReadonlyArray<string>;
-    content: string;
-};
+import Error from 'next/error';
+import { PageDetail } from 'common/types/page';
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
     const url = context.params?.url ?? '';

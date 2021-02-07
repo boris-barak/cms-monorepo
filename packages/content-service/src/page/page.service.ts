@@ -1,15 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { pagesData } from './pagesData.json';
-
-export type PageOverview = {
-    title: string;
-    url: string;
-};
-
-export type PageDetail = PageOverview & {
-    keywords?: ReadonlyArray<string>;
-    content: string;
-};
+import { PageDetail, PageOverview } from 'common/types/page';
 
 @Injectable()
 export class PageService {

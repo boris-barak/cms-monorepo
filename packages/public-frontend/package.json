@@ -10,6 +10,7 @@
     "lint:fix": "npm run lint --fix"
   },
   "dependencies": {
+    "common": "*",
     "next": "10.0.6",
     "react": "17.0.1",
     "react-dom": "17.0.1"
