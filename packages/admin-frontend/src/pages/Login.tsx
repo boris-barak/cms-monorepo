@@ -1,6 +1,9 @@
 import * as React from 'react';
 import '../App.css';
 import { Credentials } from 'common/types/auth';
+import { Heading } from '../design-components/Heading';
+import { ButtonArea, Form, PasswordInput, TextInput } from '../design-components/Form';
+import { Button } from '../design-components/Button';
 
 type Props = {
     onSubmit: (credentials: Credentials) => Promise<boolean>;
@@ -17,22 +20,15 @@ export const Login = ({ onSubmit }: Props) => {
     };
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <p>Login to CMS Administration</p>
-                <label htmlFor="login">Login</label>
-                <input type="text" name="login" defaultValue="" onChange={(value) => setLogin(value.target.value)} />
-                <br />
-                <label htmlFor="password">Password</label>
-                <input
-                    type="password"
-                    name="password"
-                    defaultValue=""
-                    onChange={(value) => setPassword(value.target.value)}
-                />
-                <br />
-                <button onClick={() => handleSubmit()}>Login</button>
-            </header>
-        </div>
+        <>
+            <Heading level={1}>Login to CMS Administration</Heading>
+            <Form>
+                <TextInput name="login" label="Login" onChange={(value) => setLogin(value.target.value)} />
+                <PasswordInput name="password" label="Password" onChange={(value) => setPassword(value.target.value)} />
+                <ButtonArea>
+                    <Button onClick={() => handleSubmit()}>Login</Button>
+                </ButtonArea>
+            </Form>
+        </>
     );
 };

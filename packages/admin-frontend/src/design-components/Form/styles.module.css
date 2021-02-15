@@ -1,0 +1,19 @@
+:local(.fieldset) {
+    display: inline;
+}
+
+:local(th) {
+    text-align: right;
+}
+
+:local(.label):after {
+    content: ":";
+}
+
+:local(.buttonArea) {
+    text-align: center;
+}
+
+:local(.buttonArea) td {
+    padding-top: 15px;
+}
