@@ -2,7 +2,7 @@
     display: inline;
 }
 
-:local(th) {
+:local(.label) {
     text-align: right;
 }
 

@@ -1,0 +1,9 @@
+:local(.grid) {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+:local(.gridItemBorder) {
+    border: 1px solid black;
+}
