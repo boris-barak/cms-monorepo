@@ -1,4 +1,9 @@
 export type Credentials = {
-    login: string;
+    email: string;
     password: string;
+};
+
+export type PublicUser = {
+    id: number;
+    email: string;
 };

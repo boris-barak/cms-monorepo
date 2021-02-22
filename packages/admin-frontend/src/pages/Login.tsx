@@ -9,11 +9,11 @@ type Props = {
 };
 
 export const Login = ({ onSubmit }: Props) => {
-    const [login, setLogin] = React.useState<string>();
+    const [email, setEmail] = React.useState<string>();
     const [password, setPassword] = React.useState<string>();
 
     const handleSubmit = async () => {
-        const isAuthenticated = login && password ? await onSubmit({ login, password }) : false;
+        const isAuthenticated = email && password ? await onSubmit({ email, password }) : false;
 
         console.log('isAuthenticated', isAuthenticated);
     };
@@ -22,7 +22,7 @@ export const Login = ({ onSubmit }: Props) => {
         <>
             <Heading level={1}>Login to CMS Administration</Heading>
             <Form>
-                <TextInput name="login" label="Login" onChange={(value) => setLogin(value.target.value)} />
+                <TextInput name="email" label="Email" onChange={(value) => setEmail(value.target.value)} />
                 <PasswordInput name="password" label="Password" onChange={(value) => setPassword(value.target.value)} />
                 <ButtonArea>
                     <Button onClick={() => handleSubmit()}>Login</Button>
