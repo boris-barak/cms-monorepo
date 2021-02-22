@@ -1,5 +1,4 @@
 import * as React from 'react';
-import '../App.css';
 import { getAllPages } from '../api/content-service';
 import { useQuery } from 'react-query';
 import { Heading } from '../design-components/Heading';

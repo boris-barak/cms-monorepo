@@ -1,5 +1,4 @@
 import * as React from 'react';
-import '../App.css';
 import { Credentials } from 'common/types/auth';
 import { Heading } from '../design-components/Heading';
 import { ButtonArea, Form, PasswordInput, TextInput } from '../design-components/Form';
