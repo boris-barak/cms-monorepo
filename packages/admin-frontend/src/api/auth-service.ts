@@ -7,5 +7,14 @@ const authServiceApi = axios.create({ baseURL: 'http://localhost:4001' });
 export const login = async (credentials: Credentials): Promise<boolean> => {
     console.log('login request', credentials);
 
-    return authServiceApi.post('auth/login', { ...credentials }).then((response) => !!response.data);
+    return authServiceApi
+        .post('auth/login', { ...credentials })
+        .then((response) => {
+            console.log('response', response);
+            return !!response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+            return false;
+        });
 };
