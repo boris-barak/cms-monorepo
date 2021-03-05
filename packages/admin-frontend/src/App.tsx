@@ -1,7 +1,7 @@
 import * as React from 'react';
+
 import { Login } from './pages/Login';
 import { PagesOverview } from './pages/PagesOverview';
-import { login } from './api/auth-service';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 const queryClientOptions = {
@@ -18,7 +18,7 @@ const queryClient = new QueryClient(queryClientOptions);
 
 export const App = () => (
     <QueryClientProvider client={queryClient}>
-        <Login onSubmit={login} />
+        <Login />
 
         <PagesOverview />
     </QueryClientProvider>

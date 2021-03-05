@@ -1,19 +1,16 @@
 import * as React from 'react';
-import { Credentials } from 'common/types/auth';
+
+import { login } from '../api/auth-service';
 import { Heading } from '../design-components/Heading';
 import { ButtonArea, Form, PasswordInput, TextInput } from '../design-components/Form';
 import { Button } from '../design-components/Button';
 
-type Props = {
-    onSubmit: (credentials: Credentials) => Promise<boolean>;
-};
-
-export const Login = ({ onSubmit }: Props) => {
+export const Login = () => {
     const [email, setEmail] = React.useState<string>();
     const [password, setPassword] = React.useState<string>();
 
     const handleSubmit = async () => {
-        const isAuthenticated = email && password ? await onSubmit({ email, password }) : false;
+        const isAuthenticated = email && password ? await login({ email, password }) : false;
 
         console.log('isAuthenticated', isAuthenticated);
     };
