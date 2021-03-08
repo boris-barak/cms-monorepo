@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Link, Switch, Route, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Switch, Route, useHistory, Redirect } from 'react-router-dom';
 
 import { Login } from './pages/Login';
 import { PagesOverview } from './pages/PagesOverview';
@@ -42,12 +42,14 @@ const queryClient = new QueryClient(queryClientOptions);
 
 export const App = () => {
     const auth = useAuth();
+    const loggedIn = auth?.user;
+    console.log('auth in App', auth);
 
     return (
         <QueryClientProvider client={queryClient}>
             <ProvideAuth>
                 <Router>
-                    {auth?.user && (
+                    {loggedIn && (
                         <ul>
                             <li>
                                 <Link to="/login">Login Page</Link>
@@ -59,10 +61,16 @@ export const App = () => {
                     )}
 
                     <Switch>
-                        <Route path="/login">
+                        <Route exact path="/">
+                            {loggedIn ? <Redirect to="/pages" /> : <Redirect to="/login" />}
+                        </Route>
+                        <Route exact path="/login">
                             <Login />
                         </Route>
-                        <PrivateRoute path="/pages">
+                        {/*<Route path="/pages">*/}
+                        {/*    <PagesOverview />*/}
+                        {/*</Route>*/}
+                        <PrivateRoute exact path="/pages">
                             <PagesOverview />
                         </PrivateRoute>
                     </Switch>

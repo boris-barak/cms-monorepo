@@ -1,5 +1,6 @@
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { ReactNode } from 'react';
+
 import { useAuth } from './hooks';
 
 // A wrapper for <Route> that redirects to the login
@@ -10,6 +11,7 @@ type Props = RouteProps & {
 
 export const PrivateRoute = ({ children, ...rest }: Props) => {
     const auth = useAuth();
+    console.log('auth in PrivateRoute', auth);
 
     return (
         <Route

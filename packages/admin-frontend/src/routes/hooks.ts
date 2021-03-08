@@ -16,7 +16,7 @@ const fakeAuth = {
     },
     signOut(cb: Callback) {
         fakeAuth.isAuthenticated = false;
-        setTimeout(cb, 100);
+        cb();
     },
 };
 
@@ -33,6 +33,7 @@ export const useProvideAuth = (): ProvideAuth => {
 
     const signIn = (cb: Callback) =>
         fakeAuth.signIn(() => {
+            console.log('signIn in useProvideAuth called');
             setUser('user');
             cb();
         });
