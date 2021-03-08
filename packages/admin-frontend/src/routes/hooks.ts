@@ -1,23 +1,12 @@
 import * as React from 'react';
+import { Credentials } from 'common/types/auth';
 
-type Callback = () => void;
+import { login } from '../api/auth-service';
 
 type ProvideAuth = {
     user: string | undefined;
-    signIn: (cb: Callback) => void;
-    signOut: (cb: Callback) => void;
-};
-
-const fakeAuth = {
-    isAuthenticated: false,
-    signIn(cb: Callback) {
-        fakeAuth.isAuthenticated = true;
-        setTimeout(cb, 100); // fake async
-    },
-    signOut(cb: Callback) {
-        fakeAuth.isAuthenticated = false;
-        cb();
-    },
+    signIn: (credentials: Credentials) => Promise<boolean>;
+    signOut: () => void;
 };
 
 /** For more details on
@@ -31,18 +20,20 @@ export const useAuth = () => React.useContext(authContext);
 export const useProvideAuth = (): ProvideAuth => {
     const [user, setUser] = React.useState<string>();
 
-    const signIn = (cb: Callback) =>
-        fakeAuth.signIn(() => {
-            console.log('signIn in useProvideAuth called');
-            setUser('user');
-            cb();
-        });
+    const signIn = async (credentials: Credentials) => {
+        const isAuthenticated = await login(credentials);
 
-    const signOut = (cb: Callback) =>
-        fakeAuth.signOut(() => {
-            setUser(undefined);
-            cb();
-        });
+        console.log('signIn in useProvideAuth called');
+        if (isAuthenticated) {
+            setUser('user');
+        }
+
+        return isAuthenticated;
+    };
+
+    const signOut = () => {
+        setUser(undefined);
+    };
 
     return {
         user,

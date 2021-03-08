@@ -21,18 +21,15 @@ export const Login = () => {
     const location = useLocation<LocationState>();
 
     const handleSubmit = async () => {
-        const isAuthenticated = email && password ? await login({ email, password }) : false;
-        if (isAuthenticated) {
-            auth?.signIn(() => {
-                console.log('signIn callback in Login called');
-                const { from } = location.state || { from: { pathname: '/pages' } };
-                console.log('from', from);
-
-                history.replace(from);
-            });
-        }
-
+        const isAuthenticated = email && password ? await auth?.signIn({ email, password }) : false;
         console.log('isAuthenticated', isAuthenticated);
+
+        if (isAuthenticated) {
+            console.log('signIn callback in Login called');
+            const { from } = location.state || { from: { pathname: '/pages' } };
+            console.log('from', from);
+            history.replace(from);
+        }
     };
 
     return (

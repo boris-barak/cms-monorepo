@@ -12,19 +12,18 @@ const AuthButton = () => {
     const history = useHistory();
     const auth = useAuth();
 
-    return auth?.user ? (
+    return (
         <p>
             Welcome!{' '}
             <button
                 onClick={() => {
-                    auth?.signOut(() => history.push('/'));
+                    auth?.signOut();
+                    history.push('/');
                 }}
             >
                 Sign out
             </button>
         </p>
-    ) : (
-        <p>You are not logged in.</p>
     );
 };
 
@@ -50,14 +49,17 @@ export const App = () => {
             <ProvideAuth>
                 <Router>
                     {loggedIn && (
-                        <ul>
-                            <li>
-                                <Link to="/login">Login Page</Link>
-                            </li>
-                            <li>
-                                <Link to="/pages">Pages Page</Link>
-                            </li>
-                        </ul>
+                        <>
+                            <AuthButton />
+                            <ul>
+                                <li>
+                                    <Link to="/login">Login Page</Link>
+                                </li>
+                                <li>
+                                    <Link to="/pages">Pages Page</Link>
+                                </li>
+                            </ul>
+                        </>
                     )}
 
                     <Switch>
@@ -67,9 +69,6 @@ export const App = () => {
                         <Route exact path="/login">
                             <Login />
                         </Route>
-                        {/*<Route path="/pages">*/}
-                        {/*    <PagesOverview />*/}
-                        {/*</Route>*/}
                         <PrivateRoute exact path="/pages">
                             <PagesOverview />
                         </PrivateRoute>
