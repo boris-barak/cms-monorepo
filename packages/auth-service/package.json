@@ -1,6 +1,6 @@
 {
     "name": "auth-service",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "private": true,
     "scripts": {
         "prebuild": "rimraf dist",
@@ -23,7 +23,7 @@
         "@nestjs/jwt": "^7.2.0",
         "@nestjs/passport": "^7.1.5",
         "@nestjs/platform-express": "^7.5.1",
-        "cms-common": "^0.0.2",
+        "cms-common": "^0.0.3",
         "passport": "^0.4.1",
         "passport-jwt": "^4.0.0",
         "passport-local": "^1.0.0",
