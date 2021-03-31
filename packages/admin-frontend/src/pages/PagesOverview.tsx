@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import { getAllPages } from '../api/content-service';
 import { useQuery } from 'react-query';
-import { Heading } from '../design-components/Heading';
-import { Grid, GridBody, GridHeader, GridHeaderColumn, GridItem, GridRow } from '../design-components/Grid';
 import { openInNewTab } from '../utils';
-import { Button } from '../design-components/Button';
+import { Button, Space, Table, Typography } from 'antd';
+
+const { Title } = Typography;
 
 export const PagesOverview = () => {
     const { data: pages } = useQuery('pages', getAllPages);
@@ -13,30 +13,40 @@ export const PagesOverview = () => {
     const handleOpen = (url: string) => openInNewTab(`http://localhost:3000/${url}`);
     const handleEdit = (url: string) => openInNewTab(`http://localhost:3000/${url}`);
 
+    const columns = [
+        {
+            title: 'Title',
+            dataIndex: 'title',
+            key: 'title',
+        },
+        {
+            title: 'URL',
+            dataIndex: 'url',
+            key: 'url',
+        },
+        {
+            title: 'Keywords',
+            dataIndex: 'keywords',
+            key: 'keywords',
+            render: (keywords?: string[]) => keywords?.join(', '),
+        },
+        {
+            title: 'Actions',
+            key: 'actions',
+            dataIndex: 'url',
+            render: (url: string) => (
+                <Space size="middle">
+                    <Button onClick={() => handleOpen(url)}>Open</Button>
+                    <Button onClick={() => handleEdit(url)}>Edit</Button>
+                </Space>
+            ),
+        },
+    ];
+
     return (
         <>
-            <Heading level={1}>Pages Overview</Heading>
-            <Grid>
-                <GridHeader>
-                    <GridHeaderColumn border>Title</GridHeaderColumn>
-                    <GridHeaderColumn border>URL</GridHeaderColumn>
-                    <GridHeaderColumn border>Keywords</GridHeaderColumn>
-                    <GridHeaderColumn border>Actions</GridHeaderColumn>
-                </GridHeader>
-                <GridBody>
-                    {pages?.map((page) => (
-                        <GridRow key={page.url}>
-                            <GridItem border>{page.title}</GridItem>
-                            <GridItem border>/{page.url}</GridItem>
-                            <GridItem border>{page.keywords?.join(',')}</GridItem>
-                            <GridItem border>
-                                <Button onClick={() => handleOpen(page.url)}>Open</Button>
-                                <Button onClick={() => handleEdit(page.url)}>Edit</Button>
-                            </GridItem>
-                        </GridRow>
-                    ))}
-                </GridBody>
-            </Grid>
+            <Title>Pages Overview</Title>
+            <Table columns={columns} dataSource={pages} />
         </>
     );
 };

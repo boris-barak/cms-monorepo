@@ -2,13 +2,12 @@ import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { ReactNode } from 'react';
 
 import { useAuth } from './hooks';
+import { PrivateLayout } from '../layouts/PrivateLayout';
 
 type Props = RouteProps & {
     children: ReactNode;
 };
 
-// A wrapper for <Route> that redirects to the login
-// screen if you're not yet authenticated.
 export const PrivateRoute = ({ children, ...rest }: Props) => {
     const auth = useAuth();
     console.log('auth in PrivateRoute', auth);
@@ -18,7 +17,7 @@ export const PrivateRoute = ({ children, ...rest }: Props) => {
             {...rest}
             render={({ location }) =>
                 auth?.user ? (
-                    children
+                    <PrivateLayout>{children}</PrivateLayout>
                 ) : (
                     <Redirect
                         to={{
