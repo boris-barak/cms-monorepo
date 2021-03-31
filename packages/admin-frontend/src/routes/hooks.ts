@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Credentials } from 'common/types/auth';
+import { Credentials } from 'cms-common/types/auth';
 
 import { login } from '../api/auth-service';
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PageDetail } from 'common/types/page';
+import { PageDetail } from 'cms-common/types/page';
 
 const contentServiceApi = axios.create({ baseURL: 'http://localhost:3001' });
 
