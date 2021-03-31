@@ -4,31 +4,27 @@ import { Credentials } from 'common/types/auth';
 import { login } from '../api/auth-service';
 
 type ProvideAuth = {
-    user: string | undefined;
-    signIn: (credentials: Credentials) => Promise<boolean>;
+    user: User | undefined;
+    signIn: (credentials: Credentials) => Promise<string | undefined>;
     signOut: () => void;
 };
 
-/** For more details on
- * `authContext`, `ProvideAuth`, `useAuth` and `useProvideAuth`
- * refer to: https://usehooks.com/useAuth/
- */
-export const authContext = React.createContext<ProvideAuth | undefined>(undefined);
-
-export const useAuth = () => React.useContext(authContext);
+type User = { access_token: string };
 
 export const useProvideAuth = (): ProvideAuth => {
-    const [user, setUser] = React.useState<string>();
+    const savedToken = localStorage.getItem('access_token');
+
+    const [user, setUser] = React.useState<User | undefined>(savedToken ? { access_token: savedToken } : undefined);
 
     const signIn = async (credentials: Credentials) => {
-        const isAuthenticated = await login(credentials);
+        const token = await login(credentials);
 
-        console.log('signIn in useProvideAuth called');
-        if (isAuthenticated) {
-            setUser('user');
+        if (token) {
+            setUser({ access_token: token });
+            localStorage.setItem('access_token', token);
         }
 
-        return isAuthenticated;
+        return token;
     };
 
     const signOut = () => {
@@ -41,3 +37,7 @@ export const useProvideAuth = (): ProvideAuth => {
         signOut,
     };
 };
+
+export const authContext = React.createContext<ProvideAuth | undefined>(undefined);
+
+export const useAuth = () => React.useContext(authContext);

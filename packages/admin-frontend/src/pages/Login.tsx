@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import { login } from '../api/auth-service';
 import { Heading } from '../design-components/Heading';
 import { ButtonArea, Form, PasswordInput, TextInput } from '../design-components/Form';
 import { Button } from '../design-components/Button';
-import { useAuth, useProvideAuth } from '../routes/hooks';
+import { useAuth } from '../routes/hooks';
 import { useHistory, useLocation } from 'react-router-dom';
 
 type LocationState = {
@@ -21,13 +20,10 @@ export const Login = () => {
     const location = useLocation<LocationState>();
 
     const handleSubmit = async () => {
-        const isAuthenticated = email && password ? await auth?.signIn({ email, password }) : false;
-        console.log('isAuthenticated', isAuthenticated);
+        const token = email && password ? await auth?.signIn({ email, password }) : undefined;
 
-        if (isAuthenticated) {
-            console.log('signIn callback in Login called');
+        if (token) {
             const { from } = location.state || { from: { pathname: '/pages' } };
-            console.log('from', from);
             history.replace(from);
         }
     };

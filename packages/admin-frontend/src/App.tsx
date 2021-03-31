@@ -39,42 +39,45 @@ const queryClientOptions = {
 };
 const queryClient = new QueryClient(queryClientOptions);
 
-export const App = () => {
+const Routing = () => {
     const auth = useAuth();
     const loggedIn = auth?.user;
-    console.log('auth in App', auth);
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <ProvideAuth>
-                <Router>
-                    {loggedIn && (
-                        <>
-                            <AuthButton />
-                            <ul>
-                                <li>
-                                    <Link to="/login">Login Page</Link>
-                                </li>
-                                <li>
-                                    <Link to="/pages">Pages Page</Link>
-                                </li>
-                            </ul>
-                        </>
-                    )}
+        <Router>
+            {loggedIn && (
+                <>
+                    <AuthButton />
+                    <ul>
+                        <li>
+                            <Link to="/login">Login Page</Link>
+                        </li>
+                        <li>
+                            <Link to="/pages">Pages Page</Link>
+                        </li>
+                    </ul>
+                </>
+            )}
 
-                    <Switch>
-                        <Route exact path="/">
-                            {loggedIn ? <Redirect to="/pages" /> : <Redirect to="/login" />}
-                        </Route>
-                        <Route exact path="/login">
-                            <Login />
-                        </Route>
-                        <PrivateRoute exact path="/pages">
-                            <PagesOverview />
-                        </PrivateRoute>
-                    </Switch>
-                </Router>
-            </ProvideAuth>
-        </QueryClientProvider>
+            <Switch>
+                <Route exact path="/">
+                    {loggedIn ? <Redirect to="/pages" /> : <Redirect to="/login" />}
+                </Route>
+                <Route exact path="/login">
+                    <Login />
+                </Route>
+                <PrivateRoute exact path="/pages">
+                    <PagesOverview />
+                </PrivateRoute>
+            </Switch>
+        </Router>
     );
 };
+
+export const App = () => (
+    <QueryClientProvider client={queryClient}>
+        <ProvideAuth>
+            <Routing />
+        </ProvideAuth>
+    </QueryClientProvider>
+);

@@ -3,12 +3,12 @@ import { ReactNode } from 'react';
 
 import { useAuth } from './hooks';
 
-// A wrapper for <Route> that redirects to the login
-// screen if you're not yet authenticated.
 type Props = RouteProps & {
     children: ReactNode;
 };
 
+// A wrapper for <Route> that redirects to the login
+// screen if you're not yet authenticated.
 export const PrivateRoute = ({ children, ...rest }: Props) => {
     const auth = useAuth();
     console.log('auth in PrivateRoute', auth);
