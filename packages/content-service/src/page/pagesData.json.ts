@@ -1,4 +1,4 @@
-import { PageDetail } from 'common/types/page';
+import { PageDetail } from 'cms-common/types/page';
 
 export const pagesData: ReadonlyArray<PageDetail> = [
     {

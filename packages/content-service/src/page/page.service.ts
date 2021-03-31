@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { pagesData } from './pagesData.json';
-import { PageDetail, PageOverview } from 'common/types/page';
+import { PageDetail, PageOverview } from 'cms-common/types/page';
 
 @Injectable()
 export class PageService {

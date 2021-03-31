@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PublicUser } from 'common/types/auth';
+import { PublicUser } from 'cms-common/types/auth';
 
 type ProtectedUser = PublicUser & {
     password: string;

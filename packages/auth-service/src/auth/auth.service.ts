@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Credentials, PublicUser } from 'common/types/auth';
+import { Credentials, PublicUser } from 'cms-common/types/auth';
 import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from '../users/users.service';

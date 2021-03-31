@@ -2,7 +2,7 @@ import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { PageService } from './page.service';
-import { PageDetail, PageOverview } from 'common/types/page';
+import { PageDetail, PageOverview } from 'cms-common/types/page';
 
 @ApiTags('Pages')
 @Controller('pages')
