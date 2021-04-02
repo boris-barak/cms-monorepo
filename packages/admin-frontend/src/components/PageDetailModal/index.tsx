@@ -1,11 +1,22 @@
 import * as React from 'react';
 import { Button, Form, Input, Modal, Spin } from 'antd';
 import { useQuery } from 'react-query';
-import { getOnePageByUrl } from '../api/content-service';
+import { getOnePageByUrl } from '../../api/content-service';
+import { KeywordsEditor } from './KeywordsEditor';
 
 const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
+    labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+    },
+    wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 20 },
+    },
+};
+
+const tailLayout = {
+    wrapperCol: { offset: 8, span: 16 },
 };
 
 type Props = {
@@ -25,6 +36,7 @@ export const PageDetailModal = ({ pageUrl, onClose }: Props) => {
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
+        onClose();
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -32,22 +44,9 @@ export const PageDetailModal = ({ pageUrl, onClose }: Props) => {
     };
 
     return (
-        <Modal
-            title="Page editing"
-            visible={pageUrl !== undefined}
-            onOk={onClose}
-            onCancel={onClose}
-            footer={[
-                <Button key="back" onClick={onClose}>
-                    Cancel
-                </Button>,
-                <Button key="submit" type="primary" loading={false} onClick={onClose}>
-                    Save
-                </Button>,
-            ]}
-        >
+        <Modal title="Page editing" visible={pageUrl !== undefined} footer={null} onCancel={onClose}>
             {page ? (
-                <Form
+                <Form<{ asd: string }>
                     {...layout}
                     form={form}
                     name="page"
@@ -64,6 +63,19 @@ export const PageDetailModal = ({ pageUrl, onClose }: Props) => {
                     </Form.Item>
                     <Form.Item label="URL" name="url" rules={[{ required: true, message: 'Please input page URL!' }]}>
                         <Input addonBefore="http://localhost:3000/" />
+                    </Form.Item>
+
+                    <KeywordsEditor />
+
+                    <Form.Item {...tailLayout}>
+                        <Button key="back" htmlType="button" onClick={onClose}>
+                            Cancel
+                        </Button>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button key="submit" type="primary" htmlType="submit" loading={false}>
+                            Save
+                        </Button>
                     </Form.Item>
                 </Form>
             ) : (
