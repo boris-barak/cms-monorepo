@@ -3,6 +3,8 @@ import { Button, Form, Input, Modal, Spin } from 'antd';
 import { useQuery } from 'react-query';
 import { getOnePageByUrl } from '../../api/content-service';
 import { KeywordsEditor } from './KeywordsEditor';
+import { PageDetail } from 'cms-common/types/page';
+import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 
 const layout = {
     labelCol: {
@@ -34,19 +36,19 @@ export const PageDetailModal = ({ pageUrl, onClose }: Props) => {
 
     console.log('page', page);
 
-    const onFinish = (values: any) => {
+    const onFinish = (values: PageDetail) => {
         console.log('Success:', values);
         onClose();
     };
 
-    const onFinishFailed = (errorInfo: any) => {
+    const onFinishFailed = (errorInfo: ValidateErrorEntity<PageDetail>) => {
         console.log('Failed:', errorInfo);
     };
 
     return (
         <Modal title="Page editing" visible={pageUrl !== undefined} footer={null} onCancel={onClose}>
             {page ? (
-                <Form<{ asd: string }>
+                <Form<PageDetail>
                     {...layout}
                     form={form}
                     name="page"
