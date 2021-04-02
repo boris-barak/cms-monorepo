@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { Login } from './pages/Login';
 import { PagesOverview } from './pages/PagesOverview';
@@ -50,5 +51,6 @@ export const App = () => (
         <ProvideAuth>
             <Routing />
         </ProvideAuth>
+        <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
 );

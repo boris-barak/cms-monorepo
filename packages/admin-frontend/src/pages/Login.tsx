@@ -50,7 +50,7 @@ export const Login = () => {
 
     return (
         <>
-            <Form {...layout} name="basic" onFinish={onFinish} onFinishFailed={onFinishFailed}>
+            <Form {...layout} name="login" onFinish={onFinish} onFinishFailed={onFinishFailed}>
                 <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
                     <Input />
                 </Form.Item>
