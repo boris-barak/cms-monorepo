@@ -5,8 +5,8 @@ import { login } from '../api/auth-service';
 
 type ProvideAuth = {
     user: User | undefined;
-    signIn: (credentials: Credentials) => Promise<string | undefined>;
-    signOut: () => void;
+    logIn: (credentials: Credentials) => Promise<boolean>;
+    logOut: () => void;
 };
 
 type User = { access_token: string };
@@ -16,7 +16,7 @@ export const useProvideAuth = (): ProvideAuth => {
 
     const [user, setUser] = React.useState<User | undefined>(savedToken ? { access_token: savedToken } : undefined);
 
-    const signIn = async (credentials: Credentials) => {
+    const logIn = async (credentials: Credentials) => {
         const token = await login(credentials);
 
         if (token) {
@@ -24,17 +24,17 @@ export const useProvideAuth = (): ProvideAuth => {
             localStorage.setItem('access_token', token);
         }
 
-        return token;
+        return !!token;
     };
 
-    const signOut = () => {
+    const logOut = () => {
         setUser(undefined);
     };
 
     return {
         user,
-        signIn,
-        signOut,
+        logIn,
+        logOut,
     };
 };
 

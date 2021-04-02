@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Credentials } from 'cms-common/types/auth';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../routes/hooks';
@@ -20,27 +21,19 @@ const tailLayout = {
 };
 
 export const Login = () => {
-    // const [email, setEmail] = React.useState<string>();
-    // const [password, setPassword] = React.useState<string>();
     const auth = useAuth();
     const history = useHistory<LocationState>();
     const location = useLocation<LocationState>();
-
-    // const handleSubmit = async () => {
-    //     const token = email && password ? await auth?.signIn({ email, password }) : undefined;
-    //
-    //     if (token) {
-    //         const { from } = location.state || { from: { pathname: '/pages' } };
-    //         history.replace(from);
-    //     }
-    // };
+    const [form] = Form.useForm();
 
     const onFinish = async ({ email, password }: Credentials) => {
-        const token = email && password ? await auth?.signIn({ email, password }) : undefined;
+        const loggedIn = email && password ? await auth?.logIn({ email, password }) : undefined;
 
-        if (token) {
+        if (loggedIn) {
             const { from } = location.state || { from: { pathname: '/pages' } };
             history.replace(from);
+        } else {
+            message.error('There is no user with given email and password');
         }
     };
 
@@ -50,9 +43,9 @@ export const Login = () => {
 
     return (
         <>
-            <Form {...layout} name="login" onFinish={onFinish} onFinishFailed={onFinishFailed}>
+            <Form {...layout} form={form} name="login" onFinish={onFinish} onFinishFailed={onFinishFailed}>
                 <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
-                    <Input />
+                    <Input prefix={<UserOutlined />} />
                 </Form.Item>
 
                 <Form.Item
@@ -60,13 +53,22 @@ export const Login = () => {
                     name="password"
                     rules={[{ required: true, message: 'Please input your password!' }]}
                 >
-                    <Input.Password />
+                    <Input.Password prefix={<LockOutlined />} />
                 </Form.Item>
 
-                <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">
-                        Sign In
-                    </Button>
+                <Form.Item {...tailLayout} shouldUpdate>
+                    {() => (
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            disabled={
+                                !form.isFieldsTouched(true) ||
+                                !!form.getFieldsError().filter(({ errors }) => errors.length).length
+                            }
+                        >
+                            Log In
+                        </Button>
+                    )}
                 </Form.Item>
             </Form>
         </>

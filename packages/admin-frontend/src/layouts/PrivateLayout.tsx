@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Layout, Menu } from 'antd';
 import { CommonFooter } from './CommonFooter';
 import { Link } from 'react-router-dom';
-import { SignOutButton } from '../components/SignOutButton';
+import { LogOutButton } from '../components/LogOutButton';
 
 const { Header, Content } = Layout;
 
@@ -21,7 +21,7 @@ export const PrivateLayout = ({ children }: Props) => (
                     <Link to="/pages">Pages Page</Link>
                 </Menu.Item>
 
-                <SignOutButton />
+                <LogOutButton />
             </Menu>
         </Header>
         <Layout>

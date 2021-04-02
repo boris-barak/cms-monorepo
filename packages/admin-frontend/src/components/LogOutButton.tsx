@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import { useAuth } from '../routes/hooks';
 import { LogoutOutlined } from '@ant-design/icons';
 
-export const SignOutButton = () => {
+export const LogOutButton = () => {
     const history = useHistory();
     const auth = useAuth();
 
@@ -14,11 +14,11 @@ export const SignOutButton = () => {
             icon={<LogoutOutlined />}
             style={{ float: 'right', top: '15px' }}
             onClick={() => {
-                auth?.signOut();
+                auth?.logOut();
                 history.push('/');
             }}
         >
-            Sign out
+            Log Out
         </Button>
     );
 };
