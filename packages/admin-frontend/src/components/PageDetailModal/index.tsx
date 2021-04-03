@@ -5,6 +5,7 @@ import { getOnePageByUrl } from '../../api/content-service';
 import { KeywordsEditor } from './KeywordsEditor';
 import { PageDetail } from 'cms-common/types/page';
 import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
+import { ContentEditor } from './ContentEditor';
 
 const layout = {
     labelCol: {
@@ -46,7 +47,7 @@ export const PageDetailModal = ({ pageUrl, onClose }: Props) => {
     };
 
     return (
-        <Modal title="Page editing" visible={pageUrl !== undefined} footer={null} onCancel={onClose}>
+        <Modal title="Page editing" visible={pageUrl !== undefined} footer={null} width="100%" onCancel={onClose}>
             {page ? (
                 <Form<PageDetail>
                     {...layout}
@@ -69,12 +70,12 @@ export const PageDetailModal = ({ pageUrl, onClose }: Props) => {
 
                     <KeywordsEditor />
 
+                    <ContentEditor pageUrl={pageUrl} />
+
                     <Form.Item {...tailLayout}>
                         <Button key="back" htmlType="button" onClick={onClose}>
                             Cancel
                         </Button>
-                    </Form.Item>
-                    <Form.Item>
                         <Button key="submit" type="primary" htmlType="submit" loading={false}>
                             Save
                         </Button>

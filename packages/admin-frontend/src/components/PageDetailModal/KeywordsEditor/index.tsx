@@ -64,17 +64,7 @@ export const KeywordsEditor = () => (
                 ))}
                 <Form.Item>
                     <Button type="dashed" onClick={() => add()} style={{ width: '60%' }} icon={<PlusOutlined />}>
-                        Add field
-                    </Button>
-                    <Button
-                        type="dashed"
-                        onClick={() => {
-                            add('The head item', 0);
-                        }}
-                        style={{ width: '60%', marginTop: '20px' }}
-                        icon={<PlusOutlined />}
-                    >
-                        Add field at head
+                        Add a keyword
                     </Button>
                     <Form.ErrorList errors={errors} />
                 </Form.Item>
