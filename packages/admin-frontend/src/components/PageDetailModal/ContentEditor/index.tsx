@@ -1,58 +1,14 @@
 import * as React from 'react';
 import { Row, Col, Typography, Divider, Input } from 'antd';
 import { useQuery } from 'react-query';
-import { PageContent, Section } from 'cms-common/types/page';
+import { Section } from 'cms-common/types/page';
 
 import { getOnePageByUrl } from '../../../api/content-service';
 import { UnknownContentItem } from './UnknownContentItemType';
+import { reducer } from './reducer';
 
 const { Title, Paragraph } = Typography;
 const { TextArea } = Input;
-
-type Action =
-    | {
-          type: 'setSectionHeader';
-          sectionIndex: number;
-          value: string;
-      }
-    | {
-          type: 'setParagraphContent';
-          sectionIndex: number;
-          itemIndex: number;
-          value: string;
-      };
-
-const reducer = (state: PageContent | undefined, action: Action) => {
-    if (!state) {
-        return state;
-    }
-
-    switch (action.type) {
-        case 'setSectionHeader':
-            return {
-                ...state,
-                sections: state.sections.map((section, index) => ({
-                    ...section,
-                    ...(index === action.sectionIndex && { header: action.value }),
-                })),
-            };
-        case 'setParagraphContent':
-            return {
-                ...state,
-                sections: state.sections.map((section, index) => ({
-                    ...section,
-                    ...(index === action.sectionIndex && {
-                        items: section.items.map((item, itemIndex) => ({
-                            ...item,
-                            ...(itemIndex === action.itemIndex && { content: action.value }),
-                        })),
-                    }),
-                })),
-            };
-        default:
-            throw new Error();
-    }
-};
 
 type Props = {
     pageUrl?: string;
@@ -106,7 +62,6 @@ export const ContentEditor = ({ pageUrl }: Props) => {
                                                             value: event.target.value,
                                                         })
                                                     }
-                                                    // onChange={onChange}
                                                 />
                                             );
                                         default:
