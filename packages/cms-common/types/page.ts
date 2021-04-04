@@ -10,11 +10,11 @@ export type Paragraph = {
 
 export type Divider = {
     type: 'divider';
-    dashed?: boolean;
-    text?: {
-        content: string;
-        orientation?: 'left' | 'right';
-    };
+    // dashed?: boolean;
+    // text?: {
+    //     content: string;
+    //     orientation?: 'left' | 'right';
+    // };
 };
 
 export type ContentItem = Paragraph | Divider;
@@ -22,7 +22,7 @@ export type ContentItem = Paragraph | Divider;
 export type Section = {
     header: string;
     hash: string;
-    items: Array<ContentItem>;
+    items: ReadonlyArray<ContentItem>;
 };
 
 export type PageContent = {
@@ -30,10 +30,10 @@ export type PageContent = {
         accordion?: boolean;
         defaultActiveKey?: Array<number>;
     };
-    sections: Array<Section>;
+    sections: ReadonlyArray<Section>;
 };
 
 export type PageDetail = PageOverview & {
-    keywords?: Array<string>;
+    keywords?: ReadonlyArray<string>;
     content: PageContent;
 };

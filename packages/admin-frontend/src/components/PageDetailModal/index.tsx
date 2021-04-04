@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { Button, Form, Input, Modal, Spin } from 'antd';
+import { Button, Collapse, Form, Input, Modal, Space, Spin } from 'antd';
 import { useQuery } from 'react-query';
 import { getOnePageByUrl } from '../../api/content-service';
 import { KeywordsEditor } from './KeywordsEditor';
 import { PageDetail } from 'cms-common/types/page';
 import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 import { ContentEditor } from './ContentEditor';
+
+const { Panel } = Collapse;
 
 const layout = {
     labelCol: {
@@ -19,7 +21,7 @@ const layout = {
 };
 
 const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
+    wrapperCol: { offset: 10, span: 24 },
 };
 
 type Props = {
@@ -68,17 +70,25 @@ export const PageDetailModal = ({ pageUrl, onClose }: Props) => {
                         <Input addonBefore="http://localhost:3000/" />
                     </Form.Item>
 
-                    <KeywordsEditor />
+                    <Collapse defaultActiveKey={['meta']}>
+                        <Panel header="Meta data" key="meta">
+                            <KeywordsEditor />
+                        </Panel>
 
-                    <ContentEditor pageUrl={pageUrl} />
+                        <Panel header="Content" key="content">
+                            <ContentEditor pageUrl={pageUrl} />
+                        </Panel>
+                    </Collapse>
 
                     <Form.Item {...tailLayout}>
-                        <Button key="back" htmlType="button" onClick={onClose}>
-                            Cancel
-                        </Button>
-                        <Button key="submit" type="primary" htmlType="submit" loading={false}>
-                            Save
-                        </Button>
+                        <Space size={24} style={{ paddingTop: 50 }}>
+                            <Button key="submit" type="primary" htmlType="submit" loading={false}>
+                                Save
+                            </Button>
+                            <Button key="back" htmlType="button" onClick={onClose}>
+                                Cancel
+                            </Button>
+                        </Space>
                     </Form.Item>
                 </Form>
             ) : (

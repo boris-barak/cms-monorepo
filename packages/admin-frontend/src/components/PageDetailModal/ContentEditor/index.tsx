@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Row, Col, Typography, Divider, Input } from 'antd';
+import { Row, Col, Typography, Divider, Input, Button, Popover } from 'antd';
 import { useQuery } from 'react-query';
 import { Section } from 'cms-common/types/page';
 
 import { getOnePageByUrl } from '../../../api/content-service';
 import { UnknownContentItem } from './UnknownContentItemType';
 import { reducer } from './reducer';
+import { DeleteTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 
 const { Title, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -21,82 +22,178 @@ export const ContentEditor = ({ pageUrl }: Props) => {
 
     const [content, dispatch] = React.useReducer(reducer, page?.content);
 
-    return (
-        <>
-            <Title level={2}>Content</Title>
-            {content && (
-                <Row>
-                    <Col span={12}>
-                        <Title level={3}>Editor</Title>
-                    </Col>
-                    <Col span={12}>
-                        <Title level={3}>Preview</Title>
-                    </Col>
+    if (!content) {
+        return null;
+    }
 
-                    <Col span={11}>
-                        {content.sections.map((section: Section, sectionIndex: number) => (
-                            <React.Fragment key={section.hash}>
-                                <Paragraph
-                                    editable={{
-                                        onChange: (value) =>
-                                            dispatch({ type: 'setSectionHeader', sectionIndex, value }),
-                                    }}
+    return (
+        <Row>
+            <Col span={12}>
+                <Title level={3}>Editor</Title>
+            </Col>
+            <Col span={12}>
+                <Title level={3}>Preview</Title>
+            </Col>
+
+            <Col span={11}>
+                {content.sections.map((section: Section, sectionIndex: number) => (
+                    <React.Fragment key={section.hash}>
+                        <Popover
+                            placement="topRight"
+                            title="Section actions"
+                            content={
+                                <Button
+                                    icon={<DeleteTwoTone />}
+                                    onClick={() =>
+                                        dispatch({
+                                            type: 'removeSection',
+                                            sectionIndex,
+                                        })
+                                    }
                                 >
-                                    {section.header}
-                                </Paragraph>
+                                    Remove
+                                </Button>
+                            }
+                        >
+                            <Input
+                                value={section.header}
+                                onChange={(event) =>
+                                    dispatch({ type: 'setSectionHeader', sectionIndex, value: event.target.value })
+                                }
+                            />
+                        </Popover>
+                        <Row>
+                            <Col span={1} />
+                            <Col span={23}>
                                 {section.items.map((item, itemIndex) => {
                                     switch (item.type) {
                                         case 'divider':
-                                            return 'divider here';
-                                        case 'paragraph':
                                             return (
-                                                <TextArea
-                                                    value={item.content}
-                                                    showCount
-                                                    maxLength={100}
-                                                    onChange={(event) =>
-                                                        dispatch({
-                                                            type: 'setParagraphContent',
-                                                            sectionIndex,
-                                                            itemIndex,
-                                                            value: event.target.value,
-                                                        })
+                                                <Popover
+                                                    placement="topRight"
+                                                    title="Divider actions"
+                                                    content={
+                                                        <Button
+                                                            icon={<DeleteTwoTone />}
+                                                            onClick={() =>
+                                                                dispatch({
+                                                                    type: 'removeItem',
+                                                                    sectionIndex,
+                                                                    itemIndex,
+                                                                })
+                                                            }
+                                                        >
+                                                            Remove
+                                                        </Button>
                                                     }
-                                                />
-                                            );
-                                        default:
-                                            return <UnknownContentItem contentItem={item} />;
-                                    }
-                                })}
-                            </React.Fragment>
-                        ))}
-                    </Col>
-
-                    <Col span={1} />
-
-                    <Col span={12}>
-                        {content.sections.map((section) => (
-                            <>
-                                <Title>{section.header}</Title>
-                                {section.items.map((item) => {
-                                    switch (item.type) {
-                                        case 'divider':
-                                            return (
-                                                <Divider orientation={item.text?.orientation} dashed={item.dashed}>
-                                                    {item.text?.content}
-                                                </Divider>
+                                                >
+                                                    <Divider>Divider</Divider>
+                                                </Popover>
                                             );
                                         case 'paragraph':
-                                            return <Paragraph>{item.content}</Paragraph>;
+                                            return (
+                                                <Popover
+                                                    placement="topRight"
+                                                    title="Paragraph actions"
+                                                    content={
+                                                        <Button
+                                                            icon={<DeleteTwoTone />}
+                                                            onClick={() =>
+                                                                dispatch({
+                                                                    type: 'removeItem',
+                                                                    sectionIndex,
+                                                                    itemIndex,
+                                                                })
+                                                            }
+                                                        >
+                                                            Remove
+                                                        </Button>
+                                                    }
+                                                >
+                                                    <TextArea
+                                                        value={item.content}
+                                                        showCount
+                                                        onChange={(event) =>
+                                                            dispatch({
+                                                                type: 'setParagraphContent',
+                                                                sectionIndex,
+                                                                itemIndex,
+                                                                value: event.target.value,
+                                                            })
+                                                        }
+                                                    />
+                                                </Popover>
+                                            );
                                         default:
                                             return <UnknownContentItem contentItem={item} />;
                                     }
                                 })}
-                            </>
-                        ))}
-                    </Col>
-                </Row>
-            )}
-        </>
+                                <Button
+                                    type="dashed"
+                                    onClick={() =>
+                                        dispatch({
+                                            type: 'addParagraph',
+                                            sectionIndex,
+                                            itemIndex: section.items.length,
+                                        })
+                                    }
+                                    style={{ width: '100%' }}
+                                    icon={<PlusCircleTwoTone />}
+                                >
+                                    Add a paragraph
+                                </Button>
+                                <Button
+                                    type="dashed"
+                                    onClick={() =>
+                                        dispatch({
+                                            type: 'addDivider',
+                                            sectionIndex,
+                                            itemIndex: section.items.length,
+                                        })
+                                    }
+                                    style={{ width: '100%' }}
+                                    icon={<PlusCircleTwoTone />}
+                                >
+                                    Add a divider
+                                </Button>
+                            </Col>
+                        </Row>
+                    </React.Fragment>
+                ))}
+                <Button
+                    type="dashed"
+                    onClick={() =>
+                        dispatch({
+                            type: 'addSection',
+                            sectionIndex: content.sections.length,
+                        })
+                    }
+                    style={{ width: '100%' }}
+                    icon={<PlusCircleTwoTone />}
+                >
+                    Add a section
+                </Button>
+            </Col>
+
+            <Col span={1} />
+
+            <Col span={12}>
+                {content.sections.map((section) => (
+                    <>
+                        <Title>{section.header}</Title>
+                        {section.items.map((item) => {
+                            switch (item.type) {
+                                case 'divider':
+                                    return <Divider />;
+                                case 'paragraph':
+                                    return <Paragraph>{item.content}</Paragraph>;
+                                default:
+                                    return <UnknownContentItem contentItem={item} />;
+                            }
+                        })}
+                    </>
+                ))}
+            </Col>
+        </Row>
     );
 };

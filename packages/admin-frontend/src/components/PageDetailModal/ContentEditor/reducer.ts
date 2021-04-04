@@ -1,10 +1,35 @@
-import { ContentItem, PageContent, Paragraph, Section } from 'cms-common/types/page';
+import { ContentItem, Divider, PageContent, Paragraph, Section } from 'cms-common/types/page';
+import { initialDivider, initialParagraph, initialSection } from './constants';
+
+type AddSectionAction = {
+    type: 'addSection';
+    sectionIndex: number;
+};
+
+type RemoveSectionAction = {
+    type: 'removeSection';
+    sectionIndex: number;
+};
 
 type SetSectionHeaderAction = {
     type: 'setSectionHeader';
     sectionIndex: number;
     value: string;
 };
+
+type AddParagraphAction = {
+    type: 'addParagraph';
+    sectionIndex: number;
+    itemIndex: number;
+};
+
+type AddDividerAction = {
+    type: 'addDivider';
+    sectionIndex: number;
+    itemIndex: number;
+};
+
+type AddItemAction = AddParagraphAction | AddDividerAction;
 
 type SetParagraphContentAction = {
     type: 'setParagraphContent';
@@ -13,7 +38,19 @@ type SetParagraphContentAction = {
     value: string;
 };
 
-type Action = SetSectionHeaderAction | SetParagraphContentAction;
+type RemoveItemAction = {
+    type: 'removeItem';
+    sectionIndex: number;
+    itemIndex: number;
+};
+
+type Action =
+    | AddSectionAction
+    | RemoveSectionAction
+    | SetSectionHeaderAction
+    | AddItemAction
+    | SetParagraphContentAction
+    | RemoveItemAction;
 
 const updateSection = (state: PageContent, action: Action, update: (section: Section) => Partial<Section>) => ({
     ...state,
@@ -23,29 +60,44 @@ const updateSection = (state: PageContent, action: Action, update: (section: Sec
     })),
 });
 
-// const updateItem = (
-//     state: PageContent,
-//     action: SetParagraphContentAction,
-//     update: (item: Paragraph) => Partial<Paragraph>,
-// ) =>
-//     updateSection(state, action, (section) => ({
-//         items: section.items.map((item, itemIndex) => {
-//             const r = {
-//                 ...item,
-//                 ...(itemIndex === action.itemIndex && update(item)),
-//             };
-//             return r;
-//         }),
-//     }));
+const addArrayItem = <T>(itemArray: ReadonlyArray<T>, index: number, item: T): ReadonlyArray<T> => [
+    ...itemArray.slice(0, index),
+    item,
+    ...itemArray.slice(index),
+];
 
-export const reducer = (state: PageContent | undefined, action: Action) => {
+const addContentItem = <T extends ContentItem>(state: PageContent, action: AddItemAction, item: T) =>
+    updateSection(state, action, (section) => ({
+        items: addArrayItem<ContentItem>(section.items, action.itemIndex, item),
+    }));
+
+export const reducer = (state: PageContent | undefined, action: Action): PageContent | undefined => {
     if (!state) {
         return state;
     }
 
     switch (action.type) {
+        case 'addSection':
+            return {
+                ...state,
+                sections: addArrayItem<Section>(state.sections, action.sectionIndex, initialSection),
+            };
+
+        case 'removeSection':
+            return {
+                ...state,
+                sections: state.sections.filter((_, sectionIndex) => sectionIndex !== action.sectionIndex),
+            };
+
         case 'setSectionHeader':
             return updateSection(state, action, () => ({ header: action.value }));
+
+        case 'addParagraph':
+            return addContentItem<Paragraph>(state, action, initialParagraph);
+
+        case 'addDivider':
+            return addContentItem<Divider>(state, action, initialDivider);
+
         case 'setParagraphContent':
             return updateSection(state, action, (section) => ({
                 items: section.items.map((item, itemIndex) => ({
@@ -53,6 +105,12 @@ export const reducer = (state: PageContent | undefined, action: Action) => {
                     ...(itemIndex === action.itemIndex && { content: action.value }),
                 })),
             }));
+
+        case 'removeItem':
+            return updateSection(state, action, (section) => ({
+                items: section.items.filter((_, itemIndex) => itemIndex !== action.itemIndex),
+            }));
+
         default:
             throw new Error();
     }

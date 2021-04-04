@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Form, Input } from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 import './styles.css';
 
 const formItemLayout = {
@@ -57,13 +57,13 @@ export const KeywordsEditor = () => (
                         >
                             <Input placeholder="a keyword" style={{ width: '60%' }} />
                         </Form.Item>
-                        {fields.length > 1 ? (
-                            <MinusCircleOutlined className="dynamic-delete-button" onClick={() => remove(field.name)} />
-                        ) : null}
+                        {fields.length > 1 && (
+                            <DeleteTwoTone className="dynamic-delete-button" onClick={() => remove(field.name)} />
+                        )}
                     </Form.Item>
                 ))}
                 <Form.Item>
-                    <Button type="dashed" onClick={() => add()} style={{ width: '60%' }} icon={<PlusOutlined />}>
+                    <Button type="dashed" onClick={() => add()} style={{ width: '80%' }} icon={<PlusCircleTwoTone />}>
                         Add a keyword
                     </Button>
                     <Form.ErrorList errors={errors} />

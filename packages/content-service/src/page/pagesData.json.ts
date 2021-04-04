@@ -36,11 +36,11 @@ export const pagesData: ReadonlyArray<PageDetail> = [
                         },
                         {
                             type: 'divider',
-                            dashed: true,
-                            text: {
-                                content: 'Some divider text',
-                                orientation: 'left',
-                            },
+                            // dashed: true,
+                            // text: {
+                            //     content: 'Some divider text',
+                            //     orientation: 'left',
+                            // },
                         },
                         {
                             type: 'paragraph',
