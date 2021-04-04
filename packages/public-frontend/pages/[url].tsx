@@ -1,8 +1,17 @@
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
 import { GetStaticPropsContext } from 'next';
+import Head from 'next/head';
 import Error from 'next/error';
-import { PageDetail } from 'common/types/page';
+import { Typography, Divider } from 'antd';
+
+import styles from '../styles/Home.module.css';
+import { PageDetail } from 'cms-common/types/page';
+
+const { Title, Paragraph } = Typography;
+
+const UnknownContentItem = ({ contentItem }: { contentItem: never }) => {
+    console.log('Unknown Content Item', contentItem);
+    return <div>Unknown Content Item</div>;
+};
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
     const url = context.params?.url ?? '';
@@ -37,17 +46,33 @@ const Page: React.FunctionComponent<Props> = ({ errorCode, data }: Props) => {
     return (
         <div className={styles.container}>
             <Head>
-                <title>Create Next App {data?.title}</title>
+                <title>{data?.title} | Website</title>
                 <link rel="icon" href="/favicon.ico" />
                 <meta name="keywords" content={data?.keywords?.join(', ')} />
             </Head>
 
             <main className={styles.main}>
-                <h1 className={styles.title}>{data?.title}</h1>
-
-                {data && <p className={styles.description} dangerouslySetInnerHTML={{ __html: data.content }} />}
+                {data && (
+                    <p className={styles.description}>
+                        {data.content.sections.map((section) => (
+                            <>
+                                <Title>{section.header}</Title>
+                                {section.items.map((item) => {
+                                    switch (item.type) {
+                                        case 'divider':
+                                            return <Divider />;
+                                        case 'paragraph':
+                                            return <Paragraph>{item.content}</Paragraph>;
+                                        default:
+                                            return <UnknownContentItem contentItem={item} />;
+                                    }
+                                })}
+                            </>
+                        ))}
+                    </p>
+                )}
             </main>
-            <footer className={styles.footer}>This is a footer</footer>
+            <footer className={styles.footer}>This is a common footer</footer>
         </div>
     );
 };
