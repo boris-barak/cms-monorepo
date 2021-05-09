@@ -1,8 +1,9 @@
+import * as React from 'react';
 import { GetStaticPropsContext } from 'next';
 import Head from 'next/head';
 import Error from 'next/error';
-import { Typography, Divider } from 'antd';
 
+import { Typography, Divider } from 'antd';
 import styles from '../styles/Home.module.css';
 import { PageDetail } from 'cms-common/types/page';
 
@@ -55,7 +56,7 @@ const Page: React.FunctionComponent<Props> = ({ errorCode, data }: Props) => {
                 {data && (
                     <p className={styles.description}>
                         {data.content.sections.map((section) => (
-                            <>
+                            <React.Fragment key={section.hash}>
                                 <Title>{section.header}</Title>
                                 {section.items.map((item) => {
                                     switch (item.type) {
@@ -67,7 +68,7 @@ const Page: React.FunctionComponent<Props> = ({ errorCode, data }: Props) => {
                                             return <UnknownContentItem contentItem={item} />;
                                     }
                                 })}
-                            </>
+                            </React.Fragment>
                         ))}
                     </p>
                 )}
