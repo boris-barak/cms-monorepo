@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { PageDetail } from 'cms-common/types/page';
 
 import { getAllPages } from '../api/content-service';
 import { useQuery } from 'react-query';
@@ -10,11 +11,11 @@ const { Title } = Typography;
 
 export const PagesOverview = () => {
     const { data } = useQuery('pages', getAllPages);
-    const [pageUrl, setPageUrl] = React.useState<string>();
+    const [pageIndex, setPageIndex] = React.useState<number>();
 
     const handleOpen = (url: string) => openInNewTab(`http://localhost:3000/${url}`);
-    const handleEdit = (url: string) => {
-        setPageUrl(url);
+    const handleEdit = (pageIndex: number) => {
+        setPageIndex(pageIndex);
     };
 
     const pages = data?.map((page) => ({ ...page, key: page.url }));
@@ -40,9 +41,9 @@ export const PagesOverview = () => {
             title: 'Actions',
             key: 'actions',
             dataIndex: 'url',
-            render: (url: string) => (
+            render: (url: string, page: PageDetail, pageIndex: number) => (
                 <Space size="middle">
-                    <Button onClick={() => handleEdit(url)}>Edit</Button>
+                    <Button onClick={() => handleEdit(pageIndex)}>Edit</Button>
                     <Button onClick={() => handleOpen(url)}>Go to</Button>
                 </Space>
             ),
@@ -51,7 +52,9 @@ export const PagesOverview = () => {
 
     return (
         <>
-            {pageUrl !== undefined && <PageDetailModal pageUrl={pageUrl} onClose={() => setPageUrl(undefined)} />}
+            {pageIndex !== undefined && data && (
+                <PageDetailModal page={data[pageIndex]} onClose={() => setPageIndex(undefined)} />
+            )}
             <Title>Pages Overview</Title>
             <Table columns={columns} dataSource={pages} />
         </>

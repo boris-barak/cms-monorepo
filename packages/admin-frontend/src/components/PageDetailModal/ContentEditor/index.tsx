@@ -1,27 +1,19 @@
 import * as React from 'react';
 import { Row, Col, Typography, Divider, Input, Button, Popover } from 'antd';
-import { useQuery } from 'react-query';
-import { Section } from 'cms-common/types/page';
+import { PageContent, Section } from 'cms-common/types/page';
 
-import { getOnePageByUrl } from '../../../api/content-service';
 import { UnknownContentItem } from './UnknownContentItemType';
-import { reducer } from './reducer';
 import { DeleteTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 
 const { Title, Paragraph } = Typography;
 const { TextArea } = Input;
 
 type Props = {
-    pageUrl?: string;
+    content?: PageContent;
+    dispatch: any;
 };
 
-export const ContentEditor = ({ pageUrl }: Props) => {
-    const { data: page } = useQuery(['page', pageUrl], () =>
-        pageUrl !== undefined ? getOnePageByUrl(pageUrl) : undefined,
-    );
-
-    const [content, dispatch] = React.useReducer(reducer, page?.content);
-
+export const ContentEditor = ({ content, dispatch }: Props) => {
     if (!content) {
         return null;
     }
