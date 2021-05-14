@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { PageDetail } from 'cms-common/types/page';
 
 import { getAllPages } from '../api/content-service';
@@ -13,7 +14,7 @@ export const PagesOverview = () => {
     const { data } = useQuery('pages', getAllPages);
     const [pageIndex, setPageIndex] = React.useState<number>();
 
-    const handleOpen = (url: string) => openInNewTab(`http://localhost:3000/${url}`);
+    const handleVisit = (url: string) => openInNewTab(`http://localhost:3000/${url}`);
     const handleEdit = (pageIndex: number) => {
         setPageIndex(pageIndex);
     };
@@ -43,8 +44,12 @@ export const PagesOverview = () => {
             dataIndex: 'url',
             render: (url: string, page: PageDetail, pageIndex: number) => (
                 <Space size="middle">
-                    <Button onClick={() => handleEdit(pageIndex)}>Edit</Button>
-                    <Button onClick={() => handleOpen(url)}>Go to</Button>
+                    <Button icon={<EditOutlined />} onClick={() => handleEdit(pageIndex)}>
+                        Edit
+                    </Button>
+                    <Button icon={<EyeOutlined />} onClick={() => handleVisit(url)}>
+                        Visit
+                    </Button>
                 </Space>
             ),
         },
