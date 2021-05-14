@@ -34,8 +34,8 @@ export const PageDetailModal = ({ page, onClose }: Props) => {
 
     console.log('page', page);
 
-    const onFinish = (values: PageDetail) => {
-        console.log('Success:', values);
+    const onFinish = (values: Partial<PageDetail>) => {
+        console.log('Success:', { ...values, content });
         onClose();
     };
 
