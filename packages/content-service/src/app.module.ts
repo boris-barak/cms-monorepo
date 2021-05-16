@@ -5,7 +5,7 @@ import { PingController } from './ping/ping.controller';
 import { PageModule } from './page/page.module';
 
 @Module({
-    imports: [PageModule, MongooseModule.forRoot('mongodb://localhost/cms-content')],
+    imports: [PageModule, MongooseModule.forRoot('mongodb://localhost/cms-content', { useCreateIndex: true })],
     controllers: [PingController],
     providers: [],
 })

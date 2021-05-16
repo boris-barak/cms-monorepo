@@ -1,6 +1,7 @@
 export type PageOverview = {
     title: string;
     url: string;
+    keywords?: ReadonlyArray<string>;
 };
 
 export type Paragraph = {
@@ -34,6 +35,5 @@ export type PageContent = {
 };
 
 export type PageDetail = PageOverview & {
-    keywords?: ReadonlyArray<string>;
     content: PageContent;
 };

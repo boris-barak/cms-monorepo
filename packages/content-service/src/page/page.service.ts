@@ -26,4 +26,9 @@ export class PageService {
     async getOnePage(url = ''): Promise<PageDetail> {
         return this.pageModel.findOne({ url }).exec();
     }
+
+    async updatePage(page: PageDetail) {
+        const result = await this.pageModel.collection.updateOne({ url: page.url }, { $set: page });
+        return result.matchedCount === 1;
+    }
 }

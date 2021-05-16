@@ -64,6 +64,7 @@ export const pagesData: ReadonlyArray<PageDetail> = [
     {
         title: 'Contact',
         url: 'contact',
+        keywords: ['contact'],
         content: {
             sections: [
                 {

@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { Button, Collapse, Form, Input, Modal, Space } from 'antd';
+import { useMutation, useQueryClient } from 'react-query';
+import { Button, Collapse, Form, Input, message, Modal, Space } from 'antd';
+
 import { KeywordsEditor } from './KeywordsEditor';
-import { PageDetail } from 'cms-common/types/page';
+import { PageDetail, PageOverview } from 'cms-common/types/page';
 import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 import { ContentEditor } from './ContentEditor';
 import { reducer } from './ContentEditor/reducer';
+import { updatePage } from '../../api/content-service';
 
 const { Panel } = Collapse;
 
@@ -32,15 +35,26 @@ export const PageDetailModal = ({ page, onClose }: Props) => {
     const [form] = Form.useForm();
     const [content, dispatch] = React.useReducer(reducer, page.content);
 
-    console.log('page', page);
+    const queryClient = useQueryClient();
 
-    const onFinish = (values: Partial<PageDetail>) => {
-        console.log('Success:', { ...values, content });
-        onClose();
+    const mutation = useMutation(updatePage, {
+        onSuccess: async () => {
+            await queryClient.invalidateQueries('pages');
+            onClose();
+            message.success('Saved successfully');
+        },
+        onError: () => {
+            message.error('Could not be saved');
+        },
+    });
+
+    const onFinish = (pageOverview: PageOverview) => {
+        const pageDetail = { ...pageOverview, content };
+        mutation.mutate(pageDetail);
     };
 
     const onFinishFailed = (errorInfo: ValidateErrorEntity<PageDetail>) => {
-        console.log('Failed:', errorInfo);
+        message.error(errorInfo);
     };
 
     return (

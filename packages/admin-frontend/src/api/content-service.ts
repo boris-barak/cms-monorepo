@@ -8,3 +8,6 @@ export const getAllPages = (): Promise<ReadonlyArray<PageDetail>> =>
 
 export const getOnePageByUrl = (url: string): Promise<PageDetail> =>
     contentServiceApi.get(`pages/detail/${url}`).then((response) => response.data);
+
+export const updatePage = (page: PageDetail): Promise<PageDetail> =>
+    contentServiceApi.put(`pages/detail`, page).then((response) => response.data);

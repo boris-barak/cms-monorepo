@@ -71,11 +71,7 @@ const addContentItem = <T extends ContentItem>(state: PageContent, action: AddIt
         items: addArrayItem<ContentItem>(section.items, action.itemIndex, item),
     }));
 
-export const reducer = (state: PageContent | undefined, action: Action): PageContent | undefined => {
-    if (!state) {
-        return state;
-    }
-
+export const reducer = (state: PageContent, action: Action): PageContent => {
     switch (action.type) {
         case 'addSection':
             return {

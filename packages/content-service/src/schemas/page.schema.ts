@@ -5,7 +5,7 @@ export type PageDocument = Page & Document;
 
 @Schema()
 export class Page extends Document {
-    @Prop()
+    @Prop({ required: true, index: true })
     url: string;
 }
 
