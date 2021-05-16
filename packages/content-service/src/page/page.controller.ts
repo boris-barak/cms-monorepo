@@ -10,18 +10,18 @@ export class PageController {
     constructor(private readonly appService: PageService) {}
 
     @Get()
-    getPagesOverview(): ReadonlyArray<PageOverview> {
+    async getPagesOverview(): Promise<ReadonlyArray<PageOverview>> {
         return this.appService.getOverviewList();
     }
 
     @Get('bulk')
-    getPagesBulk(): ReadonlyArray<PageDetail> {
+    async getPagesBulk(): Promise<ReadonlyArray<PageDetail>> {
         return this.appService.getOverviewBulk();
     }
 
     @Get('detail/:url?')
-    getOnePage(@Param('url') url = ''): PageDetail {
-        const page = this.appService.getOnePage(url);
+    async getOnePage(@Param('url') url = ''): Promise<PageDetail> {
+        const page = await this.appService.getOnePage(url);
 
         if (!page) {
             throw new NotFoundException();
