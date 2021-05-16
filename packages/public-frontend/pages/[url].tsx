@@ -2,10 +2,10 @@ import * as React from 'react';
 import { GetStaticPropsContext } from 'next';
 import Head from 'next/head';
 import Error from 'next/error';
-
 import { Typography, Divider } from 'antd';
-import styles from '../styles/Home.module.css';
+
 import { PageDetail } from 'cms-common/types/page';
+import styles from '../styles/Home.module.css';
 
 const { Title, Paragraph } = Typography;
 
@@ -58,16 +58,20 @@ const Page: React.FunctionComponent<Props> = ({ errorCode, data }: Props) => {
                         {data.content.sections.map((section) => (
                             <React.Fragment key={section.hash}>
                                 <Title>{section.header}</Title>
-                                {section.items.map((item) => {
-                                    switch (item.type) {
-                                        case 'divider':
-                                            return <Divider />;
-                                        case 'paragraph':
-                                            return <Paragraph>{item.content}</Paragraph>;
-                                        default:
-                                            return <UnknownContentItem contentItem={item} />;
-                                    }
-                                })}
+                                {section.items.map((item) => (
+                                    <React.Fragment key={JSON.stringify(item)}>
+                                        {(() => {
+                                            switch (item.type) {
+                                                case 'divider':
+                                                    return <Divider />;
+                                                case 'paragraph':
+                                                    return <Paragraph>{item.content}</Paragraph>;
+                                                default:
+                                                    return <UnknownContentItem contentItem={item} />;
+                                            }
+                                        })()}
+                                    </React.Fragment>
+                                ))}
                             </React.Fragment>
                         ))}
                     </p>
