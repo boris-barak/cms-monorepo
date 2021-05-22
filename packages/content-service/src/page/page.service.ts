@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PageDetail, PageOverview } from 'cms-common/types/page';
+import { MutationResponse } from 'cms-common/types/response';
 import { Page } from '../schemas/page.schema';
 
 @Injectable()
@@ -27,8 +28,45 @@ export class PageService {
         return this.pageModel.findOne({ url }).exec();
     }
 
-    async updatePage(page: PageDetail) {
-        const result = await this.pageModel.collection.updateOne({ url: page.url }, { $set: page });
-        return result.matchedCount === 1;
+    async createPage(page: PageDetail): Promise<MutationResponse> {
+        try {
+            const result = await this.pageModel.collection.insertOne(page);
+            return {
+                success: result.insertedCount === 1,
+            };
+        } catch (exception) {
+            return {
+                success: false,
+                message: exception.message,
+            };
+        }
+    }
+
+    async updatePage(page: PageDetail): Promise<MutationResponse> {
+        try {
+            const result = await this.pageModel.collection.updateOne({ url: page.url }, { $set: page });
+            return {
+                success: result.matchedCount === 1,
+            };
+        } catch (exception) {
+            return {
+                success: false,
+                message: exception.message,
+            };
+        }
+    }
+
+    async removePage(url: string): Promise<MutationResponse> {
+        try {
+            const result = await this.pageModel.collection.deleteOne({ url });
+            return {
+                success: result.deletedCount === 1,
+            };
+        } catch (exception) {
+            return {
+                success: false,
+                message: exception.message,
+            };
+        }
     }
 }

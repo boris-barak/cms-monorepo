@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { PageService } from './page.service';
@@ -30,8 +30,18 @@ export class PageController {
         return page;
     }
 
+    @Post('detail')
+    createPage(@Body() page: PageDetail) {
+        return this.pageService.createPage(page);
+    }
+
     @Put('detail')
     updatePage(@Body() page: PageDetail) {
         return this.pageService.updatePage(page);
+    }
+
+    @Delete('detail/:url')
+    removePage(@Param('url') url: string) {
+        return this.pageService.removePage(url);
     }
 }
